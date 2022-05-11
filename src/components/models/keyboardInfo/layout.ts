@@ -1,3 +1,5 @@
+import { accordionActionsClasses } from '@mui/material';
+
 export interface KeyValue {
   h?: number;
   label?: string;
@@ -52,24 +54,24 @@ export type LayoutStateActions =
       payload: number;
     }
   | {
-      type: 'matrix';
+      type: 'rename';
+      payload: {
+        index: number;
+        name: string;
+      };
+    }
+  | {
+      type: 'key_matrix';
       payload: {
         index: number;
         matrix: { index: number; value: number[] };
       };
     }
   | {
-      type: 'label';
+      type: 'key_label';
       payload: {
         index: number;
         label: string;
-      };
-    }
-  | {
-      type: 'name';
-      payload: {
-        index: number;
-        name: string;
       };
     };
 
@@ -80,7 +82,6 @@ export const layoutReducer = (
   const error = '';
   switch (action.type) {
     case 'remove':
-      console.log(action.payload);
       return {
         value: [
           ...state.value.slice(0, action.payload),
@@ -88,6 +89,16 @@ export const layoutReducer = (
         ],
         error: { ...state.error },
       };
+    case 'rename': {
+      const newValue = [...state.value];
+      newValue[action.payload.index].name = action.payload.name;
+      return {
+        value: newValue,
+        error: { ...state.error },
+      };
+    }
+    default:
+      console.error(`Layout: unknown event "${action.type}"`);
+      return state;
   }
-  return state;
 };

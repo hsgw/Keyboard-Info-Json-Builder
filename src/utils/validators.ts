@@ -2,8 +2,7 @@ const Validator = {
   url(v: string | null): boolean {
     try {
       if (v) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const url = new URL(v);
+        new URL(v);
         return true;
       }
     } catch (e) {

@@ -33,23 +33,10 @@ export interface DescriptionState {
   error: DescriptionError;
 }
 
-export type DescriptionStateActions =
-  | {
-      type: 'keyboard_name';
-      payload: string;
-    }
-  | {
-      type: 'maintainer';
-      payload: string;
-    }
-  | {
-      type: 'manufacturer';
-      payload: string;
-    }
-  | {
-      type: 'url';
-      payload: string;
-    };
+export type DescriptionStateActions = {
+  type: keyof Description;
+  payload: string;
+};
 
 export const descriptionReducer = (
   state: DescriptionState,

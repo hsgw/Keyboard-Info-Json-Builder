@@ -38,34 +38,22 @@ export interface USBState {
   error: USBError;
 }
 
-export type USBStateActions =
-  | {
-      type: 'vid';
-      payload: string;
-    }
-  | {
-      type: 'pid';
-      payload: string;
-    };
+export type USBStateActions = {
+  type: keyof USB;
+  payload: any;
+};
 
 export const USBReducer = (state: USBState, action: USBStateActions): USBState => {
   let error = '';
   switch (action.type) {
     case 'vid':
-      if (!action.payload) error = 'Required!';
-      else if (!Validator.hexNumber4d(action.payload))
-        error = 'Require hex 4digits number (0xFEED, 0x1234)';
-      return {
-        value: { ...state.value, ...{ vid: action.payload } },
-        error: { ...state.error, ...{ vid: error } },
-      };
     case 'pid':
       if (!action.payload) error = 'Required!';
       else if (!Validator.hexNumber4d(action.payload))
         error = 'Require hex 4digits number (0xFEED, 0x1234)';
       return {
-        value: { ...state.value, ...{ pid: action.payload } },
-        error: { ...state.error, ...{ pid: error } },
+        value: { ...state.value, ...{ [action.type]: action.payload } },
+        error: { ...state.error, ...{ [action.type]: error } },
       };
     default:
       console.error(`USB: unknown event "${action}"`);

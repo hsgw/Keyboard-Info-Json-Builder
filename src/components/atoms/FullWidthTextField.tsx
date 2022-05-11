@@ -13,15 +13,19 @@ interface FullWidthTextFieldProps {
   onChange: FullWidthTextFieldEvent;
 }
 
-export function FullWidthTextField(props: FullWidthTextFieldProps) {
-  const { label, defaultValue, error, onChange } = props;
+export function FullWidthTextField({
+  label,
+  defaultValue,
+  error,
+  onChange,
+}: FullWidthTextFieldProps) {
   return (
     <TextField
       label={label}
       sx={{
-        width: '100%',
         minHeight: '5rem',
       }}
+      fullWidth
       defaultValue={defaultValue}
       error={!!error}
       helperText={error}

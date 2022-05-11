@@ -17,23 +17,3 @@
   margin: 20px 0 10px;
   font-size: 0.9rem;
 }
-
-.layoutView {
-  background-color: grey;
-  position: relative;
-}
-
-.keyOuter {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: '0px';
-  padding: '0px';
-  user-select: none;
-}
-
-.keyInner {
-  border: 1px solid black;
-  background-color: white;
-}
