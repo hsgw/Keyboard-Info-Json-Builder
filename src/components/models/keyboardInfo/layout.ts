@@ -3,7 +3,7 @@ import { accordionActionsClasses } from '@mui/material';
 export interface KeyValue {
   h?: number;
   label?: string;
-  matrix?: number[];
+  matrix?: Array<number | undefined>;
   r?: number;
   rx?: number;
   ry?: number;
@@ -50,6 +50,10 @@ export interface LayoutState {
 
 export type LayoutStateActions =
   | {
+      type: 'add';
+      payload: { name: string; layout: KeyValue[] };
+    }
+  | {
       type: 'remove';
       payload: number;
     }
@@ -64,14 +68,14 @@ export type LayoutStateActions =
       type: 'key_matrix';
       payload: {
         index: number;
-        matrix: { index: number; value: number[] };
+        key: { index: number; matrix: Array<number | undefined> };
       };
     }
   | {
       type: 'key_label';
       payload: {
         index: number;
-        label: string;
+        key: { index: number; label: string };
       };
     };
 
@@ -81,6 +85,17 @@ export const layoutReducer = (
 ): LayoutState => {
   const error = '';
   switch (action.type) {
+    case 'add': {
+      const newValue = [...state.value];
+      newValue.push({
+        name: action.payload.name,
+        layout: action.payload.layout,
+      });
+      return {
+        value: newValue,
+        error: { ...state.error },
+      };
+    }
     case 'remove':
       return {
         value: [
@@ -97,8 +112,30 @@ export const layoutReducer = (
         error: { ...state.error },
       };
     }
-    default:
-      console.error(`Layout: unknown event "${action.type}"`);
-      return state;
+    case 'key_label': {
+      const layoutIndex = action.payload.index;
+      const keyIndex = action.payload.key.index;
+      const newValue = [...state.value];
+      newValue[layoutIndex].layout = [...newValue[layoutIndex].layout];
+      newValue[layoutIndex].layout[keyIndex].label = action.payload.key.label;
+      return {
+        value: newValue,
+        error: { ...state.error },
+      };
+    }
+    case 'key_matrix': {
+      const layoutIndex = action.payload.index;
+      const keyIndex = action.payload.key.index;
+      const newValue = [...state.value];
+      newValue[layoutIndex].layout = [...newValue[layoutIndex].layout];
+      newValue[layoutIndex].layout[keyIndex].matrix = [...action.payload.key.matrix];
+      return {
+        value: newValue,
+        error: { ...state.error },
+      };
+    }
+    // default:
+    //   console.error(`Layout: unknown event "${action.type}"`);
+    //   return state;
   }
 };

@@ -12,12 +12,14 @@ import { LayoutStateActions, LayoutValue } from './models/keyboardInfo/layout';
 interface Props {
   layout: LayoutValue;
   index: number;
-  layoutNames: string[];
   dispatch: Dispatch<LayoutStateActions>;
 }
 
-function LayoutView({ layout, index, layoutNames, dispatch }: Props) {
-  const outerBounds = calculateRotatedOuterBounds(layout.layout);
+const LayoutView = React.memo(function LayoutView({ layout, index, dispatch }: Props) {
+  const outerBounds = React.useMemo(() => {
+    return calculateRotatedOuterBounds(layout.layout);
+  }, []);
+  console.log(outerBounds);
 
   const layoutView = css({
     width: `${outerBounds.right - outerBounds.left + KeyConstants.outerPadding * 2}px`,
@@ -38,7 +40,16 @@ function LayoutView({ layout, index, layoutNames, dispatch }: Props) {
           {layout.layout.map((elm, keyIndex) => {
             return (
               <React.Fragment key={`${layout.name}-${keyIndex}`}>
-                <LayoutKey index={keyIndex} keyValue={elm} />
+                <LayoutKey
+                  layoutIndex={index}
+                  keyIndex={keyIndex}
+                  keyValue={elm}
+                  dispatch={dispatch}
+                  keyOffset={{
+                    top: outerBounds.top,
+                    left: outerBounds.left,
+                  }}
+                />
               </React.Fragment>
             );
           })}
@@ -57,7 +68,7 @@ function LayoutView({ layout, index, layoutNames, dispatch }: Props) {
             if (!newName) return 'Required';
             if (!/^LAYOUT($|_[a-zA-Z0-9_]+$)/.test(newName))
               return 'Wrong format ( "LAYOUT" or start "LAYOUT_Foo_Bar" )';
-            if (layoutNames.includes(newName)) return 'Already exists same name';
+            // if (layoutNames.includes(newName)) return 'Already exists same name';
             return '';
           }}
           onAccept={(name) => {
@@ -67,6 +78,6 @@ function LayoutView({ layout, index, layoutNames, dispatch }: Props) {
       </Grid>
     </Grid>
   );
-}
+});
 
 export default LayoutView;

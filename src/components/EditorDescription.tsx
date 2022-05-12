@@ -13,7 +13,10 @@ interface Props {
   dispatch: Dispatch<DescriptionStateActions>;
 }
 
-function EditorDescription({ state, dispatch }: Props) {
+const EditorDescription = React.memo(function EditorDescription({
+  state,
+  dispatch,
+}: Props) {
   return (
     <Grid
       container
@@ -69,6 +72,6 @@ function EditorDescription({ state, dispatch }: Props) {
       </Grid>
     </Grid>
   );
-}
+});
 
 export default EditorDescription;

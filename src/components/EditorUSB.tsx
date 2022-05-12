@@ -10,7 +10,7 @@ interface Props {
   dispatch: Dispatch<USBStateActions>;
 }
 
-function EditorUSB({ state, dispatch }: Props) {
+const EditorUSB = React.memo(function EditorUSB({ state, dispatch }: Props) {
   return (
     <Grid
       container
@@ -44,6 +44,6 @@ function EditorUSB({ state, dispatch }: Props) {
       </Grid>
     </Grid>
   );
-}
+});
 
 export default EditorUSB;

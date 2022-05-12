@@ -1,28 +1,21 @@
 import { TextField } from '@mui/material';
 import React from 'react';
 
-export type FullWidthTextFieldEvent = (
-  // e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  value: string,
-) => void;
+export type NumberTextFieldEvent = (value: number) => void;
 
-interface FullWidthTextFieldProps {
+interface Props {
   label: string;
-  defaultValue: string;
+  defaultValue: number | undefined;
   error: string;
   small?: boolean;
-  onChange: FullWidthTextFieldEvent;
+  onChange: NumberTextFieldEvent;
 }
 
-export function FullWidthTextField({
-  label,
-  defaultValue,
-  error,
-  small,
-  onChange,
-}: FullWidthTextFieldProps) {
+function NumberTextField({ label, defaultValue, error, small, onChange }: Props) {
   return (
     <TextField
+      type="number"
+      inputProps={{ min: '0', step: '1' }}
       label={label}
       sx={{
         minHeight: small ? '4rem' : '5rem',
@@ -33,8 +26,10 @@ export function FullWidthTextField({
       size={small ? 'small' : undefined}
       helperText={error}
       onChange={(e) => {
-        onChange(e.currentTarget.value);
+        onChange(parseInt(e.currentTarget.value));
       }}
     />
   );
 }
+
+export default NumberTextField;

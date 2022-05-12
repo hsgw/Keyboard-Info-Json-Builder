@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import React from 'react';
-import { initialLayout } from 'utils/testLayout';
+import { initialLayout, kle_lain } from 'utils/testLayout';
 
 import EditorDescription from './EditorDescription';
 import EditorLayout from './EditorLayout';
@@ -24,8 +24,13 @@ function KeyboardInfoEditor() {
     error: initialUSBError,
   });
 
+  const layout = [...initialLayout];
+  layout.unshift({
+    name: 'LAYOUT_LAIN',
+    layout: kle_lain,
+  });
   const [layoutState, layoutDispatch] = React.useReducer(layoutReducer, {
-    value: initialLayout,
+    value: layout,
     error: initialLayoutError,
   });
 
