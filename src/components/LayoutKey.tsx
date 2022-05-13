@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Collapse, Grid, Popover, Typography } from '@mui/material';
+import { Grid, Popover } from '@mui/material';
 import React, { Dispatch } from 'react';
 import { KeyConstants } from 'utils/constants';
 
@@ -20,6 +20,8 @@ const calcInnerSize = (size: number) => KeyConstants.innerSize * size;
 
 function LayoutKey({ layoutIndex, keyValue, keyIndex, keyOffset, dispatch }: Props) {
   const [popupAnchorElm, setPopupAnchorElm] = React.useState<HTMLDivElement | null>(null);
+
+  const hasMatrix = keyValue.matrix[0] != null && keyValue.matrix[1] != null;
 
   const handleOpen = (
     e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>,
@@ -60,7 +62,7 @@ function LayoutKey({ layoutIndex, keyValue, keyIndex, keyOffset, dispatch }: Pro
     width: `${calcInnerSize(keyValue.w ?? 1)}px`,
     height: `${calcInnerSize(keyValue.h ?? 1)}px`,
     border: '1px solid black',
-    backgroundColor: 'white',
+    backgroundColor: hasMatrix ? 'white' : 'pink',
     fontSize: 'small',
     textAlign: 'center',
     whiteSpace: 'nowrap',
@@ -81,10 +83,9 @@ function LayoutKey({ layoutIndex, keyValue, keyIndex, keyOffset, dispatch }: Pro
         onClick={handleOpen}
       >
         <div css={keyInner}>
-          {/* <div>{`${keyValue.matrix ? keyValue.matrix[0] : ''} / ${
+          <div>{`${keyValue.matrix ? keyValue.matrix[0] : ''} / ${
             keyValue.matrix ? keyValue.matrix[1] : ''
-          }`}</div> */}
-          <div>{`${keyIndex}`}</div>
+          }`}</div>
           <div>{keyValue.label}</div>
         </div>
       </div>
@@ -104,7 +105,7 @@ function LayoutKey({ layoutIndex, keyValue, keyIndex, keyOffset, dispatch }: Pro
               <NumberTextField
                 small
                 label="Row"
-                defaultValue={keyValue.matrix ? keyValue.matrix[0] : undefined}
+                defaultValue={keyValue.matrix[0] ?? undefined}
                 error={''}
                 onChange={(value) => {
                   dispatch({
@@ -113,7 +114,7 @@ function LayoutKey({ layoutIndex, keyValue, keyIndex, keyOffset, dispatch }: Pro
                       index: layoutIndex,
                       key: {
                         index: keyIndex,
-                        matrix: [value, keyValue.matrix ? keyValue.matrix[1] : undefined],
+                        matrix: [value, keyValue.matrix[1]],
                       },
                     },
                   });
@@ -124,7 +125,7 @@ function LayoutKey({ layoutIndex, keyValue, keyIndex, keyOffset, dispatch }: Pro
               <NumberTextField
                 label="Col"
                 small
-                defaultValue={keyValue.matrix ? keyValue.matrix[1] : undefined}
+                defaultValue={keyValue.matrix[1] ?? undefined}
                 error={''}
                 onChange={(value) => {
                   dispatch({
@@ -133,7 +134,7 @@ function LayoutKey({ layoutIndex, keyValue, keyIndex, keyOffset, dispatch }: Pro
                       index: layoutIndex,
                       key: {
                         index: keyIndex,
-                        matrix: [keyValue.matrix ? keyValue.matrix[0] : undefined, value],
+                        matrix: [keyValue.matrix[0], value],
                       },
                     },
                   });

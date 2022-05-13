@@ -17,7 +17,7 @@ const EditorLayout = React.memo(function EditorLayout({ state, dispatch }: Props
   };
 
   return (
-    <Grid item container direction="column">
+    <Grid item container direction="column" sx={{ marginBottom: '2rem' }}>
       <EditorHeader>Layout & Matrix</EditorHeader>
       <Grid item style={{ marginTop: '1rem' }}>
         <LayoutKlePopup addLayout={addLayout} />

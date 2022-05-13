@@ -63,7 +63,6 @@ export function calculateRotatedOuterBounds(pos: Array<KeyValue>): Outerbounds {
     )
     .reduce(
       (ret, current) => {
-        console.log(ret);
         return {
           top: Math.min(ret.top, current.topL.y, current.topR.y),
           bottom: Math.max(ret.bottom, current.bottomL.y, current.bottomR.y),

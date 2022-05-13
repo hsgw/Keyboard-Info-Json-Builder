@@ -31,14 +31,13 @@ function LayoutKlePopup({ addLayout }: Props) {
   const handleLoad = () => {
     if (!inputElm.current) return;
     const layout = importKleLayout(inputElm.current.value);
-    console.log(layout);
     addLayout('LAYOUT!!!', layout);
   };
 
   return (
     <>
       <Button variant="contained" onClick={handleOpen}>
-        Load KLE json
+        Add layout from KLE
       </Button>{' '}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Load from KLE json</DialogTitle>

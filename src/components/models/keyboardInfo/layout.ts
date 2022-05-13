@@ -1,15 +1,15 @@
-import { accordionActionsClasses } from '@mui/material';
+import { cloneDeep } from 'lodash-es';
 
 export interface KeyValue {
+  x: number;
+  y: number;
+  label: string;
+  matrix: Array<number | null>;
+  w?: number;
   h?: number;
-  label?: string;
-  matrix?: Array<number | undefined>;
   r?: number;
   rx?: number;
   ry?: number;
-  w?: number;
-  x: number;
-  y: number;
 }
 
 export interface LayoutValue {
@@ -20,22 +20,6 @@ export interface LayoutValue {
 }
 
 export type Layout = Array<LayoutValue>;
-
-export const initialLayout: Layout = [
-  {
-    name: 'LAYOUT',
-    layout: [
-      { w: 1, x: 0, y: 0 },
-      { w: 1, x: 1, y: 0 },
-      { w: 1, x: 2, y: 0 },
-      { w: 1, x: 3, y: 0 },
-      { w: 1, x: 0, y: 1 },
-      { w: 1, x: 1, y: 1 },
-      { w: 1, x: 2, y: 1 },
-      { w: 1, x: 3, y: 1 },
-    ],
-  },
-];
 
 export interface LayoutError {
   [key: number]: string;
@@ -68,7 +52,7 @@ export type LayoutStateActions =
       type: 'key_matrix';
       payload: {
         index: number;
-        key: { index: number; matrix: Array<number | undefined> };
+        key: { index: number; matrix: Array<number | null> };
       };
     }
   | {
@@ -115,8 +99,11 @@ export const layoutReducer = (
     case 'key_label': {
       const layoutIndex = action.payload.index;
       const keyIndex = action.payload.key.index;
-      const newValue = [...state.value];
-      newValue[layoutIndex].layout = [...newValue[layoutIndex].layout];
+      const newValue = cloneDeep(state.value);
+      // newValue[layoutIndex].layout = [...newValue[layoutIndex].layout];
+      // newValue[layoutIndex].layout[keyIndex] = {
+      //   ...newValue[layoutIndex].layout[keyIndex],
+      // };
       newValue[layoutIndex].layout[keyIndex].label = action.payload.key.label;
       return {
         value: newValue,
@@ -126,8 +113,7 @@ export const layoutReducer = (
     case 'key_matrix': {
       const layoutIndex = action.payload.index;
       const keyIndex = action.payload.key.index;
-      const newValue = [...state.value];
-      newValue[layoutIndex].layout = [...newValue[layoutIndex].layout];
+      const newValue = cloneDeep(state.value);
       newValue[layoutIndex].layout[keyIndex].matrix = [...action.payload.key.matrix];
       return {
         value: newValue,

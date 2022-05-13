@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import React from 'react';
-import { initialLayout, kle_lain } from 'utils/testLayout';
+import { kle_ansi, kle_ergodox, kle_lain } from 'utils/testLayout';
 
 import EditorDescription from './EditorDescription';
 import EditorLayout from './EditorLayout';
@@ -10,7 +10,7 @@ import {
   initialDescription,
   initialDescriptionError,
 } from './models/keyboardInfo/description';
-import { initialLayoutError, layoutReducer } from './models/keyboardInfo/layout';
+import { layoutReducer, LayoutValue } from './models/keyboardInfo/layout';
 import { initialUSB, initialUSBError, USBReducer } from './models/keyboardInfo/usb';
 
 function KeyboardInfoEditor() {
@@ -19,26 +19,29 @@ function KeyboardInfoEditor() {
     error: initialDescriptionError,
   });
 
+  const layout: LayoutValue[] = [
+    {
+      name: 'LAYOUT_LAIN',
+      layout: kle_lain,
+    },
+    { name: 'LAYOUT_ANSI', layout: kle_ansi },
+  ];
+
+  const [layoutState, layoutDispatch] = React.useReducer(layoutReducer, {
+    value: layout,
+    error: [],
+  });
+
   const [usbState, usbDispatch] = React.useReducer(USBReducer, {
     value: initialUSB,
     error: initialUSBError,
   });
 
-  const layout = [...initialLayout];
-  layout.unshift({
-    name: 'LAYOUT_LAIN',
-    layout: kle_lain,
-  });
-  const [layoutState, layoutDispatch] = React.useReducer(layoutReducer, {
-    value: layout,
-    error: initialLayoutError,
-  });
-
   return (
     <Grid container direction="column">
       <EditorDescription state={descriptionState} dispatch={descriptionDispatch} />
-      <EditorUSB state={usbState} dispatch={usbDispatch} />
       <EditorLayout state={layoutState} dispatch={layoutDispatch} />
+      <EditorUSB state={usbState} dispatch={usbDispatch} />
     </Grid>
   );
 }

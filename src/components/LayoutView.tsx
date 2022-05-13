@@ -19,7 +19,6 @@ const LayoutView = React.memo(function LayoutView({ layout, index, dispatch }: P
   const outerBounds = React.useMemo(() => {
     return calculateRotatedOuterBounds(layout.layout);
   }, []);
-  console.log(outerBounds);
 
   const layoutView = css({
     width: `${outerBounds.right - outerBounds.left + KeyConstants.outerPadding * 2}px`,

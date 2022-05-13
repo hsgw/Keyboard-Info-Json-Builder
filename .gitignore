@@ -5,4 +5,3 @@ dist-ssr
 *.local
 node_modules/*
 references/*
-src/utils/testLayout.ts
